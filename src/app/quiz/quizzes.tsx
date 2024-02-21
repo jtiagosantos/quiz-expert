@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { FC } from 'react';
 import { QuizCard } from './quiz-card';
 import { Quiz } from '@/interfaces/quiz';
-import { createSlug } from '@/lib/create-slug';
+import { createSlug } from '@/helpers/create-slug';
 
 type QuizzesProps = {
   quizzes: Array<Quiz>;

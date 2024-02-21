@@ -6,7 +6,7 @@ export const GET = async () => {
   try {
     const {
       data: { data },
-    } = await fauna.query<{ data: QueryResult<Quiz> }>(fql`quizzes.all()`);
+    } = await fauna.query<{ data: QueryResult<Quiz> }>(fql`quizzes.all().order(desc(.ts))`);
 
     return NextResponse.json(data);
   } catch (error) {

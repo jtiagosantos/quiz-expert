@@ -1,4 +1,3 @@
-import { Header } from './header';
 import { Quizzes } from './quizzes';
 import { Quiz } from '@/interfaces/quiz';
 
@@ -11,10 +10,5 @@ export default async function QuizPage() {
   });
   const quizzes = (await response.json()) as Array<Quiz>;
 
-  return (
-    <>
-      <Header />
-      <Quizzes quizzes={quizzes} />
-    </>
-  );
+  return <Quizzes quizzes={quizzes} />;
 }
