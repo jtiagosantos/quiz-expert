@@ -1,7 +1,15 @@
-import { Lexend } from 'next/font/google';
 import './globals.css';
 
-const lexend = Lexend({ subsets: ['latin'] });
+import { Metadata } from 'next';
+import { Lexend, Russo_One } from 'next/font/google';
+import { ClerkProvider } from '@clerk/nextjs';
+
+const lexend = Lexend({ subsets: ['latin'], variable: '--lexend' });
+const russoOne = Russo_One({ subsets: ['latin'], weight: ['400'], variable: '--russoOne' });
+
+export const metadata: Metadata = {
+  title: 'Quiz Master',
+};
 
 export default function RootLayout({
   children,
@@ -9,8 +17,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-br">
-      <body className={lexend.className}>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang="pt-br">
+        <body className={`${lexend.variable} ${russoOne.variable}`}>{children}</body>
+      </html>
+    </ClerkProvider>
   );
 }
