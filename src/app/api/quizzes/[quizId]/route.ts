@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { fauna, fql, QueryResult } from '@/lib/fauna';
+import { fauna, fql, QueryManyResult } from '@/lib/fauna/config';
 import { z } from 'zod';
 import { Quiz } from '@/interfaces/quiz';
 
@@ -46,7 +46,9 @@ export const GET = async (_: NextRequest, context: Context) => {
 
     const {
       data: { data },
-    } = await fauna.query<{ data: QueryResult<Quiz> }>(fql`quizzes.all().where(.id == ${quizId})`);
+    } = await fauna.query<{ data: QueryManyResult<Quiz> }>(
+      fql`quizzes.all().where(.id == ${quizId})`,
+    );
 
     const [rawQuiz] = data;
 

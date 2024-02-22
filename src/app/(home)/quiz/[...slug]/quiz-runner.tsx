@@ -1,10 +1,12 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { FC } from 'react';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/components/ui/use-toast';
 import { Quiz } from '@/interfaces/quiz';
+import { useFauna } from '@/lib/fauna/helpers/use-fauna';
+import { Loading } from './loadingg';
 
 type QuizRunnerProps = {
   quiz: Quiz;
@@ -17,13 +19,25 @@ export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onPlayAgain }) => {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [areButtonsDisabled, setAreButtonsDisabled] = useState(false);
   const [isQuizFinished, setIsQuizFinished] = useState(false);
+  const [isHandlingQuiz, setIsHandlingQuiz] = useState(false);
+  const [faunaUserId, setFaunaUserId] = useState<string | null>(null);
   const totalCorrectAnswers = useRef(0);
   const { toast, dismiss } = useToast();
+  const { getFaunaUser } = useFauna();
 
-  const progress = (questionIndex + 1) * 10;
+  const progress = questionIndex * 10;
   const question = quiz.questions[questionIndex];
   const totalQuestions = quiz.questions.length;
   const isLastQuestion = questionIndex + 1 === totalQuestions;
+
+  const handleQuiz = async () => {
+    try {
+      setIsHandlingQuiz(true);
+      await fetch(`http://localhost:3333/api/quizzes/done/${quiz.id}/${faunaUserId}`);
+    } finally {
+      setIsHandlingQuiz(false);
+    }
+  };
 
   const handleAnswerQuestion = async (answerId: string) => {
     setAreButtonsDisabled(true);
@@ -59,9 +73,16 @@ export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onPlayAgain }) => {
     });
 
     if (isLastQuestion) {
+      await handleQuiz();
       setIsQuizFinished(true);
     }
   };
+
+  useEffect(() => {
+    getFaunaUser().then((user) => {
+      setFaunaUserId(user.id);
+    });
+  }, []);
 
   return (
     <>
@@ -122,6 +143,7 @@ export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onPlayAgain }) => {
           </div>
         </>
       )}
+      {isHandlingQuiz && <Loading />}
     </>
   );
 };
