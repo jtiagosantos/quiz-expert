@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { fauna, fql, QueryManyResult, QueryUniqueResult } from '@/lib/fauna/config';
-import { Quiz } from '@/interfaces/quiz';
+import { fauna, fql, QueryManyResult, QueryUniqueResult, RawQuiz } from '@/lib/fauna/config';
 
 interface Context {
   params: {
@@ -22,14 +21,14 @@ export const GET = async (_: NextRequest, context: Context) => {
     );
 
     if (!quizDone) {
-      const { data: quiz } = await fauna.query<QueryUniqueResult<Quiz>>(
+      const { data: quiz } = await fauna.query<QueryUniqueResult<RawQuiz>>(
         fql`quizzes.byId(${quizId})`,
       );
 
       await fauna.query(
         fql`quizzes_done.create({
           title: ${quiz.title},
-          thumbnail_url: ${quiz.thumbnailURL},
+          thumbnail_url: ${quiz.thumbnail_url},
           category: ${quiz.category},
           quiz_id: ${quizId},
           user_id: ${userId}

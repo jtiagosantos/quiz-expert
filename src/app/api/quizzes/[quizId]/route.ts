@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { fauna, fql, QueryManyResult } from '@/lib/fauna/config';
-import { z } from 'zod';
-import { Quiz } from '@/interfaces/quiz';
+import { fauna, fql, QueryUniqueResult, RawQuiz } from '@/lib/fauna/config';
+import { FaunaQuizMapper } from '@/lib/fauna/mappers/fauna-quiz.mapper';
 
 interface Context {
   params: {
@@ -9,50 +8,15 @@ interface Context {
   };
 }
 
-const quizSchema = z
-  .object({
-    id: z.string(),
-    ts: z.object({
-      isoString: z.string(),
-    }),
-    title: z.string(),
-    thumbnailURL: z.string(),
-    category: z.string(),
-    questions: z.array(
-      z.object({
-        title: z.string(),
-        answers: z.array(
-          z.object({
-            id: z.string(),
-            text: z.string(),
-          }),
-        ),
-        correct: z.string(),
-      }),
-    ),
-  })
-  .transform((data) => ({
-    id: data.id,
-    title: data.title,
-    thumbnailURL: data.thumbnailURL,
-    category: data.category,
-    questions: data.questions,
-    createdAt: data.ts.isoString,
-  }));
-
 export const GET = async (_: NextRequest, context: Context) => {
   try {
     const { quizId } = context.params;
 
-    const {
-      data: { data },
-    } = await fauna.query<{ data: QueryManyResult<Quiz> }>(
-      fql`quizzes.all().where(.id == ${quizId})`,
+    const { data: rawQuiz } = await fauna.query<QueryUniqueResult<RawQuiz>>(
+      fql`quizzes.byId(${quizId})`,
     );
 
-    const [rawQuiz] = data;
-
-    const quiz = quizSchema.parse(rawQuiz);
+    const quiz = FaunaQuizMapper.toDomain(rawQuiz);
 
     return NextResponse.json(quiz);
   } catch (error) {

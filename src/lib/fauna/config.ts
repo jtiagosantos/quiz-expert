@@ -1,3 +1,4 @@
+import { QuizCategory } from '@/enums/quiz-category';
 import { Client, fql, QueryValue } from 'fauna';
 
 const fauna = new Client({
@@ -20,5 +21,27 @@ type RawUser = {
   };
 };
 
+type RawQuiz = {
+  id: string;
+  title: string;
+  thumbnail_url: string;
+  category: keyof typeof QuizCategory;
+  questions: Array<RawQuestion>;
+  ts: {
+    isoString: string;
+  };
+};
+
+type RawQuestion = {
+  title: string;
+  answers: Array<RawAnswer>;
+  correct: string;
+};
+
+type RawAnswer = {
+  id: string;
+  text: string;
+};
+
 export { fauna, fql };
-export type { QueryManyResult, QueryUniqueResult, RawUser };
+export type { QueryManyResult, QueryUniqueResult, RawUser, RawQuiz };
