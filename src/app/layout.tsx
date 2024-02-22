@@ -3,7 +3,7 @@ import './globals.css';
 import { Metadata } from 'next';
 import { Lexend, Russo_One } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
-import { Header } from './quiz/header';
+import { Header } from './(home)/header';
 import { Toaster } from '@/components/ui/toaster';
 
 const lexend = Lexend({ subsets: ['latin'], variable: '--lexend' });

@@ -8,11 +8,12 @@ import { Quiz } from '@/interfaces/quiz';
 
 type QuizRunnerProps = {
   quiz: Quiz;
+  onPlayAgain: () => void;
 };
 
 const ONE_SECOND_AND_HALF_MS = 1500;
 
-export const QuizRunner: FC<QuizRunnerProps> = ({ quiz }) => {
+export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onPlayAgain }) => {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [areButtonsDisabled, setAreButtonsDisabled] = useState(false);
   const [isQuizFinished, setIsQuizFinished] = useState(false);
@@ -60,10 +61,6 @@ export const QuizRunner: FC<QuizRunnerProps> = ({ quiz }) => {
     if (isLastQuestion) {
       setIsQuizFinished(true);
     }
-  };
-
-  const handlePlayAgain = () => {
-    window.location.reload();
   };
 
   return (
@@ -119,7 +116,7 @@ export const QuizRunner: FC<QuizRunnerProps> = ({ quiz }) => {
           <div className="w-full flex justify-center">
             <button
               className="w-full bg-indigo-500 p-3 rounded-md text-white font-lexend font-semibold text-[18px] mt-6 hover:bg-indigo-400 transition-all duration-300"
-              onClick={handlePlayAgain}>
+              onClick={onPlayAgain}>
               Jogar Novamente
             </button>
           </div>

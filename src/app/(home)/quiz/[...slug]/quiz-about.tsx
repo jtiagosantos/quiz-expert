@@ -8,24 +8,11 @@ import CategoryIcon from '@/assets/icons/category.svg';
 import BookIcon from '@/assets/icons/book.svg';
 
 type QuizAboutProps = {
-  quizId: string;
+  quiz: Quiz;
   onStartQuiz: () => void;
-  onSetQuiz: (quiz: Quiz) => void;
 };
 
-export const QuizAbout: FC<QuizAboutProps> = async ({ quizId, onStartQuiz, onSetQuiz }) => {
-  const response = await fetch(`http://localhost:3333/api/quizzes/${quizId}`, {
-    next: {
-      revalidate: false,
-    },
-  });
-  const quiz = (await response.json()) as Quiz;
-
-  const handleStartQuiz = () => {
-    onSetQuiz(quiz);
-    onStartQuiz();
-  };
-
+export const QuizAbout: FC<QuizAboutProps> = ({ quiz, onStartQuiz }) => {
   return (
     <>
       <h2 className="text-gray-700 font-lexend font-semibold text-2xl">{quiz.title}</h2>
@@ -61,7 +48,7 @@ export const QuizAbout: FC<QuizAboutProps> = async ({ quizId, onStartQuiz, onSet
       </div>
       <button
         className="w-full bg-indigo-500 p-3 rounded-md text-white font-lexend font-semibold text-[18px] mt-6 hover:bg-indigo-400 transition-all duration-300"
-        onClick={handleStartQuiz}>
+        onClick={onStartQuiz}>
         Iniciar o Quiz
       </button>
     </>
