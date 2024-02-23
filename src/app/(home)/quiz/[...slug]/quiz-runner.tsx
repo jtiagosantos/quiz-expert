@@ -6,7 +6,7 @@ import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/components/ui/use-toast';
 import { Quiz } from '@/interfaces/quiz';
 import { useFauna } from '@/lib/fauna/helpers/use-fauna';
-import { Loading } from './loadingg';
+import { CalculationAnswersLoading } from './calculation-answers-loading';
 
 type QuizRunnerProps = {
   quiz: Quiz;
@@ -19,7 +19,7 @@ export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onPlayAgain }) => {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [areButtonsDisabled, setAreButtonsDisabled] = useState(false);
   const [isQuizFinished, setIsQuizFinished] = useState(false);
-  const [isHandlingQuiz, setIsHandlingQuiz] = useState(false);
+  const [isCalculatingAnswers, setIsCalculatingAnswers] = useState(false);
   const [faunaUserId, setFaunaUserId] = useState<string | null>(null);
   const totalCorrectAnswers = useRef(0);
   const { toast, dismiss } = useToast();
@@ -32,10 +32,10 @@ export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onPlayAgain }) => {
 
   const handleQuiz = async () => {
     try {
-      setIsHandlingQuiz(true);
+      setIsCalculatingAnswers(true);
       await fetch(`http://localhost:3333/api/quizzes/done/${quiz.id}/${faunaUserId}`);
     } finally {
-      setIsHandlingQuiz(false);
+      setIsCalculatingAnswers(false);
     }
   };
 
@@ -143,7 +143,7 @@ export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onPlayAgain }) => {
           </div>
         </>
       )}
-      {isHandlingQuiz && <Loading />}
+      {isCalculatingAnswers && <CalculationAnswersLoading />}
     </>
   );
 };
