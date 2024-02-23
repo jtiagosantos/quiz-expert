@@ -4,13 +4,13 @@ import { QuizCard } from './quiz-card';
 import { Quiz } from '@/interfaces/quiz';
 import { createSlug } from '@/helpers/create-slug';
 
-type QuizzesProps = {
+type QuizPageClientComponentProps = {
   quizzes: Array<Quiz>;
 };
 
-export const Quizzes: FC<QuizzesProps> = ({ quizzes }) => {
+export const QuizPageClientComponent: FC<QuizPageClientComponentProps> = ({ quizzes }) => {
   return (
-    <div className="pt-[100px] pb-10 grid grid-cols-4 max-w-[1110px] mx-auto gap-6">
+    <main className="pt-[100px] pb-10 grid grid-cols-4 max-w-[1110px] mx-auto gap-6">
       {quizzes?.map((quiz) => {
         const urlForQuizPage = '/quiz/'.concat(createSlug(quiz.title).concat('--').concat(quiz.id));
 
@@ -20,6 +20,6 @@ export const Quizzes: FC<QuizzesProps> = ({ quizzes }) => {
           </Link>
         );
       })}
-    </div>
+    </main>
   );
 };

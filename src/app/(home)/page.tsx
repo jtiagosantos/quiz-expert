@@ -1,7 +1,7 @@
-import { Quizzes } from './quizzes';
+import { QuizPageClientComponent } from './component';
 import { Quiz } from '@/interfaces/quiz';
 
-export default async function QuizPage() {
+export default async function QuizPageServerComponent() {
   const response = await fetch('http://localhost:3333/api/quizzes/find', {
     next: {
       //revalidate: 60 * 60, //1 hour
@@ -10,5 +10,5 @@ export default async function QuizPage() {
   });
   const quizzes = (await response.json()) as Array<Quiz>;
 
-  return <Quizzes quizzes={quizzes} />;
+  return <QuizPageClientComponent quizzes={quizzes} />;
 }
