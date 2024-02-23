@@ -43,5 +43,17 @@ type RawAnswer = {
   text: string;
 };
 
+type RawQuizDone = {
+  id: string;
+  title: string;
+  thumbnail_url: string;
+  category: keyof typeof QuizCategory;
+  quiz_id: string;
+  user_id: string;
+  ts: {
+    isoString: string;
+  };
+};
+
 export { fauna, fql };
-export type { QueryManyResult, QueryUniqueResult, RawUser, RawQuiz };
+export type { QueryManyResult, QueryUniqueResult, RawUser, RawQuiz, RawQuizDone };

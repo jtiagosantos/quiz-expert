@@ -7,8 +7,10 @@ import {
   MenubarItem,
   MenubarMenu,
   MenubarTrigger,
+  MenubarSeparator,
 } from '@/components/ui/menubar';
 import { SignOutButton } from './sign-out-button';
+import BooksIcon from '@/assets/icons/books.svg';
 
 export const Header = async () => {
   const user = await currentUser();
@@ -32,6 +34,15 @@ export const Header = async () => {
                 />
               </MenubarTrigger>
               <MenubarContent>
+                <MenubarItem className="focus:bg-indigo-200">
+                  <Link
+                    href="/meus-quizzes"
+                    className="font-lexend text-gray-700 flex items-center gap-2">
+                    <BooksIcon />
+                    Meus Quizzes
+                  </Link>
+                </MenubarItem>
+                <MenubarSeparator />
                 <MenubarItem className="focus:bg-indigo-200">
                   <SignOutButton />
                 </MenubarItem>

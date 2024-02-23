@@ -2,7 +2,7 @@ import { useUser } from '@clerk/nextjs';
 import { fauna, fql, QueryManyResult, RawUser } from '../config';
 import { FaunaUserMapper } from '../mappers/fauna-user.mapper';
 
-export const useFauna = () => {
+export const useFaunaClient = () => {
   const { user: clerkUser } = useUser();
 
   const getFaunaUser = async () => {

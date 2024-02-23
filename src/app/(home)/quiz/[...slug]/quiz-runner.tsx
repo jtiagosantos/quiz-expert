@@ -5,7 +5,7 @@ import type { FC } from 'react';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/components/ui/use-toast';
 import { Quiz } from '@/interfaces/quiz';
-import { useFauna } from '@/lib/fauna/helpers/use-fauna';
+import { useFaunaClient } from '@/lib/fauna/helpers/use-fauna-client';
 import { CalculationAnswersLoading } from './calculation-answers-loading';
 
 type QuizRunnerProps = {
@@ -23,7 +23,7 @@ export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onPlayAgain }) => {
   const [faunaUserId, setFaunaUserId] = useState<string | null>(null);
   const totalCorrectAnswers = useRef(0);
   const { toast, dismiss } = useToast();
-  const { getFaunaUser } = useFauna();
+  const { getFaunaUser } = useFaunaClient();
 
   const progress = questionIndex * 10;
   const question = quiz.questions[questionIndex];

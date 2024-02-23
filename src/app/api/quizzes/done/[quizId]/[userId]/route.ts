@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidateTag } from 'next/cache';
 import { fauna, fql, QueryManyResult, QueryUniqueResult, RawQuiz } from '@/lib/fauna/config';
 
 interface Context {
@@ -34,6 +35,8 @@ export const GET = async (_: NextRequest, context: Context) => {
           user_id: ${userId}
         })`,
       );
+
+      revalidateTag('quizzes.done');
     }
 
     return NextResponse.json({});
