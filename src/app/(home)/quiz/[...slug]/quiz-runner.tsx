@@ -13,7 +13,7 @@ type QuizRunnerProps = {
   onPlayAgain: () => void;
 };
 
-const ONE_SECOND_AND_HALF_MS = 1500;
+const ONE_SECOND_MS = 1000;
 
 export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onPlayAgain }) => {
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -67,7 +67,7 @@ export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onPlayAgain }) => {
         setAreButtonsDisabled(false);
 
         resolve(timeoutId);
-      }, ONE_SECOND_AND_HALF_MS);
+      }, ONE_SECOND_MS);
     }).then((timeoutId) => {
       clearTimeout(timeoutId as NodeJS.Timeout);
     });

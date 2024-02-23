@@ -17,7 +17,7 @@ export const GET = async (_: NextRequest, context: Context) => {
         data: [quizDone],
       },
     } = await fauna.query<{ data: QueryManyResult<Record<string, string> | null> }>(
-      fql`quizzes_done.byUserId(${userId}).where(.quizId == ${quizId})`,
+      fql`quizzes_done.byUserId(${userId}).where(.quiz_id == ${quizId})`,
     );
 
     if (!quizDone) {
