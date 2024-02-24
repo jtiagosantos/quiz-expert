@@ -7,7 +7,7 @@ export default async function MyQuizzesServerComponent() {
 
   const user = await getFaunaUser();
 
-  const response = await fetch(`http://localhost:3333/api/quizzes/find/done/${user.id}`, {
+  const response = await fetch(`http://localhost:3333/api/quizzes-done/find/${user.id}`, {
     next: {
       tags: ['quizzes.done'],
     },
