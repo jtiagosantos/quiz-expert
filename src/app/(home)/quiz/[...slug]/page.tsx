@@ -15,8 +15,9 @@ export default async function QuizPageServerCompoent({ params }: QuizPageParams)
   const [_, quizId] = pathname.split('--');
 
   const response = await fetch(`http://localhost:3333/api/quizzes/find/${quizId}`, {
+    cache: 'no-store',
     next: {
-      revalidate: false,
+      revalidate: 0,
     },
   });
   const quiz = (await response.json()) as Quiz;

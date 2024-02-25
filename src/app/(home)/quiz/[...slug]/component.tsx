@@ -4,7 +4,7 @@
 
 import { useState } from 'react';
 import type { FC } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@clerk/nextjs';
 import { QuizAbout } from './quiz-about';
 import { QuizRunner } from './quiz-runner';
@@ -20,6 +20,7 @@ export const QuizPageClientComponent: FC<QuizPageClientComponentProps> = ({ quiz
   const [showAuthModal, setShowAuthModal] = useState(false);
   const { isSignedIn: isUserSignedIn } = useAuth();
   const pathname = usePathname();
+  const router = useRouter();
 
   const handleStartQuiz = () => {
     if (!isUserSignedIn) {
@@ -30,13 +31,17 @@ export const QuizPageClientComponent: FC<QuizPageClientComponentProps> = ({ quiz
     setDoesQuizStart(true);
   };
 
+  const handlePlayAgain = () => {
+    window.location.reload();
+  };
+
   return (
     <>
       <main className="max-w-[690px] w-full pt-[100px] mx-auto pb-6">
         {!doesQuizStart ? (
           <QuizAbout quiz={quiz} onStartQuiz={handleStartQuiz} />
         ) : (
-          <QuizRunner quiz={quiz} onPlayAgain={() => setDoesQuizStart(false)} />
+          <QuizRunner quiz={quiz} onPlayAgain={handlePlayAgain} />
         )}
       </main>
       {showAuthModal && <AuthModal redirectURL={pathname} />}

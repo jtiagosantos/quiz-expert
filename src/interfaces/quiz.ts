@@ -5,6 +5,7 @@ export interface Quiz {
   title: string;
   thumbnailURL: string;
   category: keyof typeof QuizCategory;
+  timesPlayed: number;
   questions: Question[];
   createdAt: string;
 }

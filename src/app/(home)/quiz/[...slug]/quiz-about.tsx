@@ -6,6 +6,7 @@ import { Quiz } from '@/interfaces/quiz';
 import CalendarIcon from '@/assets/icons/calendar.svg';
 import CategoryIcon from '@/assets/icons/category.svg';
 import BookIcon from '@/assets/icons/book.svg';
+import TargetArrowIcon from '@/assets/icons/target-arrow.svg';
 
 type QuizAboutProps = {
   quiz: Quiz;
@@ -36,13 +37,19 @@ export const QuizAbout: FC<QuizAboutProps> = ({ quiz, onStartQuiz }) => {
         <div className="flex items-center gap-1">
           <CategoryIcon />
           <p className="font-lexend font-normal text-sm text-gray-500">
-            {QuizCategory[quiz.category]}
+            {QuizCategory[quiz.category].toLowerCase()}
           </p>
         </div>
         <div className="flex items-center gap-1">
           <BookIcon />
           <p className="font-lexend font-normal text-sm text-gray-500">
             {quiz.questions.length} perguntas
+          </p>
+        </div>
+        <div className="flex items-center gap-1">
+          <TargetArrowIcon />
+          <p className="font-lexend font-normal text-sm text-gray-500">
+            {quiz.timesPlayed} vezes jogado
           </p>
         </div>
       </div>

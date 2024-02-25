@@ -8,6 +8,7 @@ export class FaunaQuizMapper {
       title: raw.title,
       thumbnailURL: raw.thumbnail_url,
       category: raw.category,
+      timesPlayed: raw.times_played,
       questions: raw.questions,
       createdAt: raw.ts.isoString,
     };
