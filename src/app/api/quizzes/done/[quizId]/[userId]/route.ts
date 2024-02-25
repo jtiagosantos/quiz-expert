@@ -9,7 +9,7 @@ interface Context {
   };
 }
 
-export const GET = async (_: NextRequest, context: Context) => {
+export const PUT = async (_: NextRequest, context: Context) => {
   try {
     const { quizId, userId } = context.params;
 

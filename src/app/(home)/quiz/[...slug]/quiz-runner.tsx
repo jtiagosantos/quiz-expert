@@ -33,7 +33,9 @@ export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onPlayAgain }) => {
   const handleQuiz = async () => {
     try {
       setIsCalculatingAnswers(true);
-      await fetch(`http://localhost:3333/api/quizzes/done/${quiz.id}/${faunaUserId}`);
+      await fetch(`http://localhost:3333/api/quizzes/done/${quiz.id}/${faunaUserId}`, {
+        method: 'PUT',
+      });
     } finally {
       setIsCalculatingAnswers(false);
     }
