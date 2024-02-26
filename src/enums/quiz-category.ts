@@ -4,4 +4,5 @@ export enum QuizCategory {
   GEOGRAPHY = 'Geografia',
   TECHNOLOGY = 'Tecnologia',
   FANTASY = 'Fantasia',
+  MATH = 'Matemática',
 }

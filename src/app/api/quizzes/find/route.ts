@@ -6,22 +6,28 @@ export const GET = async (request: NextRequest) => {
   try {
     const queryParams = request.nextUrl.searchParams;
     const category = queryParams.get('category');
+    const orderByTimesPlayed = queryParams.get('times_played');
 
     let rawQuizzes: Array<RawQuiz> = [];
+    let orderBy = 'order(desc(.ts))';
+
+    if (orderByTimesPlayed === 'asc') {
+      orderBy = 'order(asc(.times_played))';
+    } else if (orderByTimesPlayed === 'desc') {
+      orderBy = 'order(desc(.times_played))';
+    }
 
     if (!category) {
       const {
         data: { data },
-      } = await fauna.query<{ data: QueryManyResult<RawQuiz> }>(
-        fql`quizzes.all().order(desc(.ts))`,
-      );
+      } = await fauna.query<{ data: QueryManyResult<RawQuiz> }>(fql([`quizzes.all().${orderBy}`]));
 
       rawQuizzes = data;
     } else {
       const {
         data: { data },
       } = await fauna.query<{ data: QueryManyResult<RawQuiz> }>(
-        fql`quizzes.all().where(.category == ${category}).order(desc(.ts))`,
+        fql([`quizzes.all().where(.category == '${category}').${orderBy}`]),
       );
 
       rawQuizzes = data;
