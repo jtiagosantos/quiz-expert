@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { FC } from 'react';
 import { QuizCard } from './quiz-card';
+import { QuizCardSkeleton } from './quiz-card-skeleton';
 import { Quiz } from '@/interfaces/quiz';
 import { QuizCategory } from '@/enums/quiz-category';
 import { createSlug } from '@/helpers/create-slug';
@@ -46,8 +47,11 @@ export const QuizPageClientComponent: FC<QuizPageClientComponentProps> = (server
   const [orderBy, setOrderBy] = useState<OrderBy>({
     timesPlayed: undefined,
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleFetchQuizzesByParams = async () => {
+    setIsLoading(true);
+
     const url = new URL('http://localhost:3333/api/quizzes/find');
 
     if (!!filters.category) {
@@ -66,6 +70,8 @@ export const QuizPageClientComponent: FC<QuizPageClientComponentProps> = (server
     const quizzes = (await response.json()) as Array<Quiz>;
 
     setQuizzes(quizzes);
+
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -144,17 +150,28 @@ export const QuizPageClientComponent: FC<QuizPageClientComponentProps> = (server
       )}
 
       <div className="grid grid-cols-4 gap-6 mt-6">
-        {quizzes.map((quiz) => {
-          const urlForQuizPage = '/quiz/'.concat(
-            createSlug(quiz.title).concat('--').concat(quiz.id),
-          );
+        {isLoading && (
+          <>
+            {Array.from({ length: 8 }).map((_, index) => (
+              <QuizCardSkeleton key={index} />
+            ))}
+          </>
+        )}
+        {!isLoading && (
+          <>
+            {quizzes.map((quiz) => {
+              const urlForQuizPage = '/quiz/'.concat(
+                createSlug(quiz.title).concat('--').concat(quiz.id),
+              );
 
-          return (
-            <Link href={urlForQuizPage} key={quiz.id}>
-              <QuizCard quiz={quiz} />
-            </Link>
-          );
-        })}
+              return (
+                <Link href={urlForQuizPage} key={quiz.id}>
+                  <QuizCard quiz={quiz} />
+                </Link>
+              );
+            })}
+          </>
+        )}
       </div>
     </main>
   );
