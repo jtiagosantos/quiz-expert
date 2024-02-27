@@ -2,8 +2,9 @@ import Link from 'next/link';
 import { QuizDone } from '@/interfaces/quiz-done';
 import type { FC } from 'react';
 import { createSlug } from '@/helpers/create-slug';
-import { QuizCard } from './quiz-card';
+import { QuizCard } from '@/components/quiz-card';
 import BookRemoveIcon from '@/assets/icons/book-remove.svg';
+import { QuizCategory } from '@/enums/quiz-category';
 
 type MyQuizzesClientComponentProps = {
   quizzesDone: Array<QuizDone>;
@@ -33,7 +34,17 @@ export const MyQuizzesClientComponent: FC<MyQuizzesClientComponentProps> = ({ qu
 
             return (
               <Link href={urlForQuizPage} key={quizDone.id}>
-                <QuizCard quizDone={quizDone} />
+                <QuizCard.Root>
+                  <QuizCard.ThumbnailWrap>
+                    <QuizCard.Thumbnail
+                      src={quizDone.thumbnailURL}
+                      fill={true}
+                      alt={quizDone.title}
+                    />
+                    <QuizCard.Flag>{QuizCategory[quizDone.category]}</QuizCard.Flag>
+                  </QuizCard.ThumbnailWrap>
+                  <QuizCard.Title>{quizDone.title}</QuizCard.Title>
+                </QuizCard.Root>
               </Link>
             );
           })}

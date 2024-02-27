@@ -5,8 +5,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { FC } from 'react';
-import { QuizCard } from './quiz-card';
-import { QuizCardSkeleton } from './quiz-card-skeleton';
+import { QuizCard } from '../../components/quiz-card';
 import { Quiz } from '@/interfaces/quiz';
 import { QuizCategory } from '@/enums/quiz-category';
 import { createSlug } from '@/helpers/create-slug';
@@ -153,7 +152,7 @@ export const QuizPageClientComponent: FC<QuizPageClientComponentProps> = (server
         {isLoading && (
           <>
             {Array.from({ length: 8 }).map((_, index) => (
-              <QuizCardSkeleton key={index} />
+              <QuizCard.Skeleton key={index} />
             ))}
           </>
         )}
@@ -166,7 +165,13 @@ export const QuizPageClientComponent: FC<QuizPageClientComponentProps> = (server
 
               return (
                 <Link href={urlForQuizPage} key={quiz.id}>
-                  <QuizCard quiz={quiz} />
+                  <QuizCard.Root>
+                    <QuizCard.ThumbnailWrap>
+                      <QuizCard.Thumbnail src={quiz.thumbnailURL} fill={true} alt={quiz.title} />
+                      <QuizCard.Flag>{QuizCategory[quiz.category]}</QuizCard.Flag>
+                    </QuizCard.ThumbnailWrap>
+                    <QuizCard.Title>{quiz.title}</QuizCard.Title>
+                  </QuizCard.Root>
                 </Link>
               );
             })}
