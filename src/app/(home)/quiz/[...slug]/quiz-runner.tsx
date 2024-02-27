@@ -23,7 +23,7 @@ export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onPlayAgain }) => {
   const [faunaUserId, setFaunaUserId] = useState<string | null>(null);
   const totalCorrectAnswers = useRef(0);
   const { toast, dismiss } = useToast();
-  const { getFaunaUser } = useFaunaClient();
+  const { getFaunaUser, saveQuizAsDone, saveQuizAsPlayed } = useFaunaClient();
 
   const progress = questionIndex * 10;
   const question = quiz.questions[questionIndex];
@@ -33,14 +33,15 @@ export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onPlayAgain }) => {
   const handleQuiz = async () => {
     try {
       setIsCalculatingAnswers(true);
-      await fetch(`http://localhost:3333/api/quizzes/done/${quiz.id}/${faunaUserId}`, {
-        method: 'PUT',
+
+      await saveQuizAsDone({
+        quizId: quiz.id,
+        userId: faunaUserId as string,
       });
-      await fetch(`http://localhost:3333/api/quizzes/played/${quiz.id}`, {
-        method: 'PUT',
-        body: JSON.stringify({
-          timesPlayed: quiz.timesPlayed + 1,
-        }),
+
+      await saveQuizAsPlayed({
+        quizId: quiz.id,
+        timesPlayed: quiz.timesPlayed + 1,
       });
     } finally {
       setIsCalculatingAnswers(false);
