@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { orderByContent } from './data/order-by-content';
+import { useLoading } from '@/helpers/use-loading';
 import XIcon from '@/assets/icons/x.svg';
 
 type QuizPageClientComponentProps = {
@@ -46,10 +47,10 @@ export const QuizPageClientComponent: FC<QuizPageClientComponentProps> = (server
   const [orderBy, setOrderBy] = useState<OrderBy>({
     timesPlayed: undefined,
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading, enableLoading, disableLoading } = useLoading();
 
   const handleFetchQuizzesByParams = async () => {
-    setIsLoading(true);
+    enableLoading();
 
     const url = new URL('http://localhost:3333/api/quizzes/find');
 
@@ -70,7 +71,7 @@ export const QuizPageClientComponent: FC<QuizPageClientComponentProps> = (server
 
     setQuizzes(quizzes);
 
-    setIsLoading(false);
+    disableLoading();
   };
 
   useEffect(() => {

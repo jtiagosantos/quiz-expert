@@ -10,6 +10,7 @@ import BookRemoveIcon from '@/assets/icons/book-remove.svg';
 import { QuizCategory } from '@/enums/quiz-category';
 import { useFaunaClient } from '@/lib/fauna/helpers/use-fauna-client';
 import { User } from '@/interfaces/user';
+import { useLoading } from '@/helpers/use-loading';
 
 type MyQuizzesClientComponentProps = {
   user: User;
@@ -17,17 +18,17 @@ type MyQuizzesClientComponentProps = {
 
 export const MyQuizzesClientComponent: FC<MyQuizzesClientComponentProps> = ({ user }) => {
   const [quizzesDone, setQuizzesDone] = useState<Array<QuizDone>>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { isLoading, enableLoading, disableLoading } = useLoading();
   const { findQuizzesDone } = useFaunaClient();
 
   useEffect(() => {
-    setIsLoading(true);
+    enableLoading();
     findQuizzesDone({ userId: user.id })
       .then((data) => {
         setQuizzesDone(data);
       })
       .finally(() => {
-        setIsLoading(false);
+        disableLoading();
       });
   }, []);
 
