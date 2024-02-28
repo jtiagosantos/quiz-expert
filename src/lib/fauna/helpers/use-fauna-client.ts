@@ -98,12 +98,35 @@ export const useFaunaClient = () => {
     )`);
   };
 
-  const findQuizzesDone = async ({ userId }: FindQuizzesDoneParams) => {
-    const {
-      data: { data: rawQuizzesDone },
-    } = await fauna.query<{ data: QueryManyResult<RawQuizDone> }>(
-      fql`quizzes_done.byUserId(${userId}).order(desc(.ts))`,
-    );
+  const findQuizzesDone = async ({ userId, filters, orderBy }: FindQuizzesDoneParams) => {
+    let rawQuizzesDone: Array<RawQuizDone> = [];
+    let order = 'order(desc(.ts))';
+
+    if (orderBy?.timestamp === 'asc') {
+      order = 'order(asc(.ts))';
+    } else if (orderBy?.timestamp === 'desc') {
+      order = 'order(desc(.ts))';
+    }
+
+    if (!filters?.category) {
+      const {
+        data: { data },
+      } = await fauna.query<{ data: QueryManyResult<RawQuizDone> }>(
+        fql([`quizzes_done.byUserId('${userId}').${order}`]),
+      );
+
+      rawQuizzesDone = data;
+    } else {
+      const {
+        data: { data },
+      } = await fauna.query<{ data: QueryManyResult<RawQuizDone> }>(
+        fql([
+          `quizzes_done.byUserId('${userId}').where(.category == '${filters.category}').${order}`,
+        ]),
+      );
+
+      rawQuizzesDone = data;
+    }
 
     const quizzesDone = rawQuizzesDone.map((rawQuizDone) =>
       FaunaQuizDoneMapper.toDomain(rawQuizDone),

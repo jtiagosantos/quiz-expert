@@ -16,28 +16,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { orderByContent } from './data/order-by-content';
 import { useLoading } from '@/helpers/use-loading';
 import { useFaunaClient } from '@/lib/fauna/helpers/use-fauna-client';
+import { Filters } from '@/interfaces/filters';
+import { OrderBy } from '@/interfaces/order-by';
 import XIcon from '@/assets/icons/x.svg';
+
+const orderByContent = [
+  {
+    key: 'timesPlayed',
+    label: 'Mais jogados',
+    value: 'desc',
+  },
+  {
+    key: 'timesPlayed',
+    label: 'Menos jogados',
+    value: 'asc',
+  },
+];
 
 type QuizPageClientComponentProps = {
   quizzes: Array<Quiz>;
-};
-
-type Filters = {
-  category: null | undefined | keyof typeof QuizCategory;
-};
-
-type OrderBy = {
-  timesPlayed:
-    | {
-        key: string;
-        label: string;
-        value: 'asc' | 'desc';
-      }
-    | undefined
-    | null;
 };
 
 export const QuizPageClientComponent: FC<QuizPageClientComponentProps> = (serverProps) => {
