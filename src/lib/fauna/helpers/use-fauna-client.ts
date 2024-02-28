@@ -10,9 +10,11 @@ import {
 } from '../config';
 import { FaunaUserMapper } from '../mappers/fauna-user.mapper';
 import { FaunaQuizDoneMapper } from '../mappers/fauna-quiz-done.mapper';
+import { FaunaQuizMapper } from '../mappers/fauna-quiz.mapper';
 import { SaveQuizAsDoneParams } from '../interfaces/save-quiz-as-done-params';
 import { SaveQuizAsPlayedParams } from '../interfaces/save-quiz-as-played-params';
 import { FindQuizzesDoneParams } from '../interfaces/find-quizzes-done-params';
+import { FindQuizzesParams } from '../interfaces/find-quizzes-params';
 
 export const useFaunaClient = () => {
   const { user: clerkUser } = useUser();
@@ -29,6 +31,37 @@ export const useFaunaClient = () => {
     const user = FaunaUserMapper.toDomain(rawUser);
 
     return user;
+  };
+
+  const findQuizzes = async ({ filters, orderBy }: FindQuizzesParams = {}) => {
+    let rawQuizzes: Array<RawQuiz> = [];
+    let order = 'order(desc(.ts))';
+
+    if (orderBy?.timesPlayed === 'asc') {
+      order = 'order(asc(.times_played))';
+    } else if (orderBy?.timesPlayed === 'desc') {
+      order = 'order(desc(.times_played))';
+    }
+
+    if (!filters?.category) {
+      const {
+        data: { data },
+      } = await fauna.query<{ data: QueryManyResult<RawQuiz> }>(fql([`quizzes.all().${order}`]));
+
+      rawQuizzes = data;
+    } else {
+      const {
+        data: { data },
+      } = await fauna.query<{ data: QueryManyResult<RawQuiz> }>(
+        fql([`quizzes.all().where(.category == '${filters.category}').${order}`]),
+      );
+
+      rawQuizzes = data;
+    }
+
+    const quizzes = rawQuizzes.map((rawQuiz) => FaunaQuizMapper.toDomain(rawQuiz));
+
+    return quizzes;
   };
 
   const saveQuizAsDone = async ({ quizId, userId }: SaveQuizAsDoneParams) => {
@@ -81,6 +114,7 @@ export const useFaunaClient = () => {
 
   return {
     getFaunaUser,
+    findQuizzes,
     saveQuizAsDone,
     saveQuizAsPlayed,
     findQuizzesDone,

@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/select';
 import { orderByContent } from './data/order-by-content';
 import { useLoading } from '@/helpers/use-loading';
+import { useFaunaClient } from '@/lib/fauna/helpers/use-fauna-client';
 import XIcon from '@/assets/icons/x.svg';
 
 type QuizPageClientComponentProps = {
@@ -48,26 +49,19 @@ export const QuizPageClientComponent: FC<QuizPageClientComponentProps> = (server
     timesPlayed: undefined,
   });
   const { isLoading, enableLoading, disableLoading } = useLoading();
+  const { findQuizzes } = useFaunaClient();
 
   const handleFetchQuizzesByParams = async () => {
     enableLoading();
 
-    const url = new URL('http://localhost:3333/api/quizzes/find');
-
-    if (!!filters.category) {
-      url.searchParams.append('category', filters.category!);
-    } else {
-      url.searchParams.delete('category');
-    }
-
-    if (orderBy.timesPlayed) {
-      url.searchParams.append('times_played', orderBy.timesPlayed.value);
-    } else {
-      url.searchParams.delete('times_played');
-    }
-
-    const response = await fetch(url);
-    const quizzes = (await response.json()) as Array<Quiz>;
+    const quizzes = await findQuizzes({
+      filters: {
+        category: filters.category ?? undefined,
+      },
+      orderBy: {
+        timesPlayed: orderBy.timesPlayed?.value ?? undefined,
+      },
+    });
 
     setQuizzes(quizzes);
 
