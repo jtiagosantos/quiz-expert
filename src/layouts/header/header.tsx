@@ -16,7 +16,7 @@ export const Header = async () => {
   const user = await currentUser();
 
   return (
-    <header className="w-screen bg-white py-4 fixed shadow-md shadow-gray-200">
+    <header className="w-screen bg-white py-4 fixed shadow-md shadow-gray-200 z-[99]">
       <div className="max-w-[1280px] w-full mx-auto flex items-center justify-between">
         <h1 className="text-indigo-500 text-3xl font-normal font-russoOne">
           <Link href="/">🧠 Quiz Master</Link>
