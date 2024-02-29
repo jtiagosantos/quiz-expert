@@ -17,14 +17,14 @@ export const Header = async () => {
 
   return (
     <header className="w-screen bg-white py-4 fixed shadow-md shadow-gray-200 z-[99]">
-      <div className="max-w-[1280px] w-full mx-auto flex items-center justify-between">
-        <h1 className="text-indigo-500 text-3xl font-normal font-russoOne">
+      <div className="max-w-[1280px] w-full mx-auto flex items-center justify-between max-[1300px]:px-4">
+        <h1 className="text-indigo-500 text-3xl font-normal font-russoOne max-[790px]:text-2xl hover:opacity-80">
           <Link href="/">🧠 Quiz Master</Link>
         </h1>
         {!!user && (
           <Menubar className="border-none">
             <MenubarMenu>
-              <MenubarTrigger className="data-[state=open]:bg-transparent focus:bg-transparent cursor-pointer">
+              <MenubarTrigger className="data-[state=open]:bg-transparent focus:bg-transparent cursor-pointer hover:opacity-80">
                 <Image
                   src={user?.imageUrl ?? ''}
                   alt="Foto de perfil"
@@ -33,8 +33,8 @@ export const Header = async () => {
                   className="rounded-full"
                 />
               </MenubarTrigger>
-              <MenubarContent>
-                <MenubarItem className="focus:bg-indigo-200">
+              <MenubarContent className="mr-4">
+                <MenubarItem className="focus:bg-indigo-200 hover:bg-indigo-200">
                   <Link
                     href="/meus-quizzes"
                     className="font-lexend text-gray-700 flex items-center gap-2">
@@ -43,7 +43,7 @@ export const Header = async () => {
                   </Link>
                 </MenubarItem>
                 <MenubarSeparator />
-                <MenubarItem className="focus:bg-indigo-200">
+                <MenubarItem className="focus:bg-indigo-200 hover:bg-indigo-200">
                   <SignOutButton />
                 </MenubarItem>
               </MenubarContent>

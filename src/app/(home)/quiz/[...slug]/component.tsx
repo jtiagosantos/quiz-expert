@@ -37,7 +37,7 @@ export const QuizPageClientComponent: FC<QuizPageClientComponentProps> = ({ quiz
 
   return (
     <>
-      <main className="max-w-[690px] w-full pt-[100px] mx-auto pb-6">
+      <main className="max-w-[690px] w-full pt-[100px] mx-auto pb-6 max-[1300px]:px-4">
         {!doesQuizStart ? (
           <QuizAbout quiz={quiz} onStartQuiz={handleStartQuiz} />
         ) : (

@@ -123,7 +123,7 @@ export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onPlayAgain }) => {
       )}
       {isQuizFinished && (
         <>
-          <div className="w-full flex items-center gap-4">
+          <div className="w-full flex items-center gap-4 max-[430px]:flex-col">
             <div className="w-full bg-white rounded-[12px] overflow-hidden border border-gray-200 shadow-md shadow-gray-200 p-4 flex flex-col items-center gap-2">
               <span className="text-2xl">🤩</span>
               <span className="font-lexend font-semibold text-xl text-gray-700">

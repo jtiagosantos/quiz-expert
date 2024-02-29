@@ -16,8 +16,10 @@ type QuizAboutProps = {
 export const QuizAbout: FC<QuizAboutProps> = ({ quiz, onStartQuiz }) => {
   return (
     <>
-      <h2 className="text-gray-700 font-lexend font-semibold text-2xl">{quiz.title}</h2>
-      <div className="w-full h-[480px] relative rounded-2xl overflow-hidden my-4">
+      <h2 className="text-gray-700 font-lexend font-semibold text-2xl max-[550px]:text-xl">
+        {quiz.title}
+      </h2>
+      <div className="w-full max-h-[480px] relative rounded-2xl overflow-hidden my-4 aspect-[1/0.8]">
         <Image
           src={quiz.thumbnailURL}
           alt={quiz.title}
@@ -27,7 +29,7 @@ export const QuizAbout: FC<QuizAboutProps> = ({ quiz, onStartQuiz }) => {
           }}
         />
       </div>
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-6 flex-wrap max-[535px]:gap-3">
         <div className="flex items-center gap-1">
           <CalendarIcon />
           <p className="font-lexend font-normal text-sm text-gray-500">
