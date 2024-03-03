@@ -4,7 +4,9 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import type { FC } from 'react';
+import queryString from 'query-string';
 import { QuizCard } from '../../components/quiz-card';
 import { Quiz } from '@/interfaces/quiz';
 import { QuizCategory } from '@/enums/quiz-category';
@@ -35,20 +37,32 @@ const orderByContent = [
   },
 ];
 
+type URLParam = 'category' | 'timesPlayed';
+
 type QuizPageClientComponentProps = {
   quizzes: Array<Quiz>;
 };
 
-export const QuizPageClientComponent: FC<QuizPageClientComponentProps> = (serverProps) => {
+export const QuizzesPageClientComponent: FC<QuizPageClientComponentProps> = (serverProps) => {
+  const queryParams = queryString.parse(window.location.search);
+
+  const categoryParam = queryParams?.['category'] as undefined | keyof typeof QuizCategory;
+  const timesPlayedParam = queryParams?.['times_played'] as undefined | 'asc' | 'desc';
+
   const [quizzes, setQuizzes] = useState(serverProps.quizzes ?? []);
   const [filters, setFilters] = useState<Filters>({
-    category: undefined,
+    category: categoryParam,
   });
   const [orderBy, setOrderBy] = useState<OrderBy>({
-    timesPlayed: undefined,
+    timesPlayed: timesPlayedParam && {
+      key: 'timesPlayed',
+      label: timesPlayedParam === 'asc' ? 'Menos jogados' : 'Mais jogados',
+      value: timesPlayedParam,
+    },
   });
   const { isLoading, enableLoading, disableLoading } = useLoading();
   const { findQuizzes } = useFaunaClient();
+  const router = useRouter();
 
   const handleFetchQuizzesByParams = async () => {
     enableLoading();
@@ -67,8 +81,34 @@ export const QuizPageClientComponent: FC<QuizPageClientComponentProps> = (server
     disableLoading();
   };
 
+  const handleRemoveURLParam = (param: URLParam) => {
+    let url = window.location.href;
+
+    if (param === 'category') {
+      setFilters({ category: null });
+      url = queryString.exclude(url, ['category']);
+    } else if (param === 'timesPlayed') {
+      setOrderBy({ timesPlayed: null });
+      url = queryString.exclude(url, ['times_played']);
+    }
+
+    router.replace(url);
+  };
+
+  const handleAddURLParam = (param: URLParam, value: string) => {
+    let url = window.location.href;
+
+    if (param === 'category') {
+      url = queryString.stringifyUrl({ url, query: { category: value } });
+    } else if (param === 'timesPlayed') {
+      url = queryString.stringifyUrl({ url, query: { times_played: value } });
+    }
+
+    router.replace(url);
+  };
+
   useEffect(() => {
-    if (filters.category !== undefined || orderBy.timesPlayed !== undefined) {
+    if (filters.category !== categoryParam || orderBy.timesPlayed?.value !== timesPlayedParam) {
       handleFetchQuizzesByParams();
     }
   }, [filters, orderBy]);
@@ -86,7 +126,10 @@ export const QuizPageClientComponent: FC<QuizPageClientComponentProps> = (server
           </p>
           <Select
             value={filters.category ?? ''}
-            onValueChange={(value) => setFilters({ category: value as keyof typeof QuizCategory })}>
+            onValueChange={(value) => {
+              setFilters({ category: value as keyof typeof QuizCategory });
+              handleAddURLParam('category', value);
+            }}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Categoria" />
             </SelectTrigger>
@@ -108,6 +151,7 @@ export const QuizPageClientComponent: FC<QuizPageClientComponentProps> = (server
               setOrderBy({
                 [key]: { key, label, value },
               } as OrderBy);
+              handleAddURLParam('timesPlayed', value);
             }}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Parâmetro" />
@@ -127,7 +171,7 @@ export const QuizPageClientComponent: FC<QuizPageClientComponentProps> = (server
         <div className="mt-4 flex items-center gap-3">
           {!!filters.category && (
             <button
-              onClick={() => setFilters({ category: null })}
+              onClick={() => handleRemoveURLParam('category')}
               className="bg-indigo-500 font-lexend font-normal text-white text-base w-fit py-1 px-2 rounded-md flex items-center gap-2 hover:bg-indigo-400 transition-all duration-300">
               {QuizCategory[filters.category as keyof typeof QuizCategory]}
               <XIcon />
@@ -135,7 +179,7 @@ export const QuizPageClientComponent: FC<QuizPageClientComponentProps> = (server
           )}
           {!!orderBy.timesPlayed && (
             <button
-              onClick={() => setOrderBy({ timesPlayed: null })}
+              onClick={() => handleRemoveURLParam('timesPlayed')}
               className="bg-indigo-500 font-lexend font-normal text-white text-base w-fit py-1 px-2 rounded-md flex items-center gap-2 hover:bg-indigo-400 transition-all duration-300">
               {orderBy.timesPlayed.label}
               <XIcon />

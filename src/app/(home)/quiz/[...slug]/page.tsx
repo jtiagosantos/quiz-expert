@@ -3,13 +3,13 @@
 import { QuizPageClientComponent } from './component';
 import { useFaunaServer } from '@/lib/fauna/helpers/use-fauna-server';
 
-type QuizPageParams = {
+type QuizPageProps = {
   params: {
     slug: Array<string>;
   };
 };
 
-export default async function QuizPageServerCompoent({ params }: QuizPageParams) {
+export default async function QuizPageServerCompoent({ params }: QuizPageProps) {
   const [pathname] = params.slug;
   const [_, quizId] = pathname.split('--');
 
