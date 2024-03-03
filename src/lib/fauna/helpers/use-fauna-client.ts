@@ -17,7 +17,7 @@ import { FindQuizzesDoneParams } from '../interfaces/find-quizzes-done-params';
 import { FindQuizzesParams } from '../interfaces/find-quizzes-params';
 
 export const useFaunaClient = () => {
-  const { user: clerkUser } = useUser();
+  const { user: clerkUser, isLoaded } = useUser();
 
   const getFaunaUser = async () => {
     const {
@@ -136,6 +136,7 @@ export const useFaunaClient = () => {
   };
 
   return {
+    isLoadedClerkUser: isLoaded,
     getFaunaUser,
     findQuizzes,
     saveQuizAsDone,

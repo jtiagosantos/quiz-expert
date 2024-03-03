@@ -44,7 +44,7 @@ export default function MyQuizzesPage() {
   });
   const [user, setUser] = useState<User | undefined>(undefined);
   const { isLoading, enableLoading, disableLoading } = useLoading(true);
-  const { getFaunaUser, findQuizzesDone } = useFaunaClient();
+  const { isLoadedClerkUser, getFaunaUser, findQuizzesDone } = useFaunaClient();
 
   const handleFetchQuizzesDoneByParams = async () => {
     enableLoading();
@@ -65,10 +65,12 @@ export default function MyQuizzesPage() {
   };
 
   useEffect(() => {
-    getFaunaUser().then((data) => {
-      setUser(data);
-    });
-  }, []);
+    if (isLoadedClerkUser) {
+      getFaunaUser().then((data) => {
+        setUser(data);
+      });
+    }
+  }, [isLoadedClerkUser]);
 
   useEffect(() => {
     if (user) {
