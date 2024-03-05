@@ -43,6 +43,7 @@ export default function MyQuizzesPage() {
     timestamp: undefined,
   });
   const [user, setUser] = useState<User | undefined>(undefined);
+  const [isOpenSelect, setIsOpenSelect] = useState(false);
   const { isLoading, enableLoading, disableLoading } = useLoading(true);
   const { isLoadedClerkUser, getFaunaUser, findQuizzesDone } = useFaunaClient();
 
@@ -91,6 +92,7 @@ export default function MyQuizzesPage() {
           </p>
           <Select
             value={filters.category ?? ''}
+            onOpenChange={() => setIsOpenSelect((state) => !state)}
             onValueChange={(value) => setFilters({ category: value as keyof typeof QuizCategory })}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Categoria" />
@@ -108,6 +110,7 @@ export default function MyQuizzesPage() {
           <p className="font-lexend font-medium text-base text-gray-700">Ordenar por:</p>
           <Select
             value={!orderBy.timestamp ? '' : JSON.stringify(orderBy.timestamp)}
+            onOpenChange={() => setIsOpenSelect((state) => !state)}
             onValueChange={(input) => {
               const { key, label, value } = JSON.parse(input);
               setOrderBy({
@@ -174,7 +177,7 @@ export default function MyQuizzesPage() {
                 );
 
                 return (
-                  <Link href={urlForQuizPage} key={quizDone.id}>
+                  <Link href={isOpenSelect ? '' : urlForQuizPage} key={quizDone.id}>
                     <QuizCard.Root>
                       <QuizCard.ThumbnailWrap>
                         <QuizCard.Thumbnail

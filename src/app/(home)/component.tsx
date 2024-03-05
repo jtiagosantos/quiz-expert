@@ -60,6 +60,7 @@ export const QuizzesPageClientComponent: FC<QuizPageClientComponentProps> = (ser
       value: timesPlayedParam,
     },
   });
+  const [isOpenSelect, setIsOpenSelect] = useState(false);
   const { isLoading, enableLoading, disableLoading } = useLoading();
   const { findQuizzes } = useFaunaClient();
   const router = useRouter();
@@ -126,6 +127,7 @@ export const QuizzesPageClientComponent: FC<QuizPageClientComponentProps> = (ser
           </p>
           <Select
             value={filters.category ?? ''}
+            onOpenChange={() => setIsOpenSelect((state) => !state)}
             onValueChange={(value) => {
               setFilters({ category: value as keyof typeof QuizCategory });
               handleAddURLParam('category', value);
@@ -146,6 +148,7 @@ export const QuizzesPageClientComponent: FC<QuizPageClientComponentProps> = (ser
           <p className="font-lexend font-medium text-base text-gray-700">Ordenar por:</p>
           <Select
             value={!orderBy.timesPlayed ? '' : JSON.stringify(orderBy.timesPlayed)}
+            onOpenChange={() => setIsOpenSelect((state) => !state)}
             onValueChange={(input) => {
               const { key, label, value } = JSON.parse(input);
               setOrderBy({
@@ -204,7 +207,7 @@ export const QuizzesPageClientComponent: FC<QuizPageClientComponentProps> = (ser
               );
 
               return (
-                <Link href={urlForQuizPage} key={quiz.id}>
+                <Link href={isOpenSelect ? '' : urlForQuizPage} key={quiz.id}>
                   <QuizCard.Root>
                     <QuizCard.ThumbnailWrap>
                       <QuizCard.Thumbnail src={quiz.thumbnailURL} fill={true} alt={quiz.title} />
