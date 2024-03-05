@@ -4,7 +4,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import type { FC } from 'react';
 import queryString from 'query-string';
 import { QuizCard } from '../../components/quiz-card';
@@ -44,7 +44,9 @@ type QuizPageClientComponentProps = {
 };
 
 export const QuizzesPageClientComponent: FC<QuizPageClientComponentProps> = (serverProps) => {
-  const queryParams = queryString.parse(window.location.search);
+  const searchParams = useSearchParams();
+
+  const queryParams = queryString.parse(searchParams.toString());
 
   const categoryParam = queryParams?.['category'] as undefined | keyof typeof QuizCategory;
   const timesPlayedParam = queryParams?.['times_played'] as undefined | 'asc' | 'desc';
