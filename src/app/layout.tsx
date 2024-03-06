@@ -20,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="pt-br">
+      <html
+        lang="pt-br"
+        className="scrollbar-thumb-gray-500 scrollbar-track-white scrollbar-thin scrollbar-thumb-rounded-full">
         <body className={`${lexend.variable} ${russoOne.variable}`}>
           <Header />
           <Toaster />

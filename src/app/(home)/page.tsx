@@ -10,16 +10,19 @@ type QuizzesPageProps = {
 };
 
 export default async function QuizzesPageServerComponent({ searchParams }: QuizzesPageProps) {
-  const { findQuizzes } = await useFaunaServer();
+  const { findQuizzes, findForMostPlayedQuizzes } = await useFaunaServer();
 
-  const quizzes = await findQuizzes({
-    filters: {
-      category: searchParams?.category,
-    },
-    orderBy: {
-      timesPlayed: searchParams?.times_played,
-    },
-  });
+  const [quizzes, mostPlayedQuizzes] = await Promise.all([
+    findQuizzes({
+      filters: {
+        category: searchParams?.category,
+      },
+      orderBy: {
+        timesPlayed: searchParams?.times_played,
+      },
+    }),
+    findForMostPlayedQuizzes(),
+  ]);
 
-  return <QuizzesPageClientComponent quizzes={quizzes} />;
+  return <QuizzesPageClientComponent quizzes={quizzes} mostPlayedQuizzes={mostPlayedQuizzes} />;
 }

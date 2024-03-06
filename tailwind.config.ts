@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { fontFamily } from 'tailwindcss/defaultTheme';
 import type { Config } from 'tailwindcss';
 
@@ -72,7 +73,7 @@ const config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'), require('tailwind-scrollbar')({ nocompatible: true })],
 } satisfies Config;
 
 export default config;
