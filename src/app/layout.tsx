@@ -10,7 +10,7 @@ const lexend = Lexend({ subsets: ['latin'], variable: '--lexend' });
 const russoOne = Russo_One({ subsets: ['latin'], weight: ['400'], variable: '--russoOne' });
 
 export const metadata: Metadata = {
-  title: 'Quiz Master',
+  title: 'Quiz Expert',
 };
 
 export default function RootLayout({

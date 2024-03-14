@@ -19,7 +19,7 @@ export const Header = async () => {
     <header className="w-screen bg-white py-4 fixed shadow-md shadow-gray-200 z-[99]">
       <div className="max-w-[1280px] w-full mx-auto flex items-center justify-between max-[1300px]:px-4">
         <h1 className="text-indigo-500 text-3xl font-normal font-russoOne max-[790px]:text-2xl hover:opacity-80">
-          <Link href="/">🧠 Quiz Master</Link>
+          <Link href="/">🧠 Quiz Expert</Link>
         </h1>
         {!!user && (
           <Menubar className="border-none">
