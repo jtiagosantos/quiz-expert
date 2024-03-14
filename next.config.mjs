@@ -9,10 +9,7 @@ const nextConfig = {
         hostname: 'img.clerk.com',
       },
       {
-        hostname: 'dev-beta.quizur.com',
-      },
-      {
-        hostname: 'quiz-master-app.s3.amazonaws.com',
+        hostname: 'quiz-expert.s3.amazonaws.com',
       },
     ],
   },
