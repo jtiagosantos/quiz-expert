@@ -138,7 +138,7 @@ export default function MyQuizzesPage() {
           <div className="mt-4 flex items-center gap-3">
             {!!filters.category && (
               <button
-                onClick={() => setFilters({ category: null })}
+                onClick={() => !isOpenSelect && setFilters({ category: null })}
                 className="bg-indigo-500 font-lexend font-normal text-white text-base w-fit py-1 px-2 rounded-md flex items-center gap-2 hover:bg-indigo-400 transition-all duration-300">
                 {QuizCategory[filters.category as keyof typeof QuizCategory]}
                 <XIcon />
@@ -146,7 +146,7 @@ export default function MyQuizzesPage() {
             )}
             {!!orderBy.timestamp && (
               <button
-                onClick={() => setOrderBy({ timestamp: null })}
+                onClick={() => !isOpenSelect && setOrderBy({ timestamp: null })}
                 className="bg-indigo-500 font-lexend font-normal text-white text-base w-fit py-1 px-2 rounded-md flex items-center gap-2 hover:bg-indigo-400 transition-all duration-300">
                 {orderBy.timestamp.label}
                 <XIcon />

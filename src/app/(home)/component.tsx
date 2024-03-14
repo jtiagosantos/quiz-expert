@@ -96,7 +96,9 @@ export const QuizzesPageClientComponent: FC<QuizPageClientComponentProps> = (ser
       url = queryString.exclude(url, ['times_played']);
     }
 
-    router.replace(url);
+    router.replace(url, {
+      scroll: false,
+    });
   };
 
   const handleAddURLParam = (param: URLParam, value: string) => {
@@ -108,7 +110,9 @@ export const QuizzesPageClientComponent: FC<QuizPageClientComponentProps> = (ser
       url = queryString.stringifyUrl({ url, query: { times_played: value } });
     }
 
-    router.replace(url);
+    router.replace(url, {
+      scroll: false,
+    });
   };
 
   useEffect(() => {
@@ -203,7 +207,7 @@ export const QuizzesPageClientComponent: FC<QuizPageClientComponentProps> = (ser
           <div className="mt-4 flex items-center gap-3">
             {!!filters.category && (
               <button
-                onClick={() => handleRemoveURLParam('category')}
+                onClick={() => !isOpenSelect && handleRemoveURLParam('category')}
                 className="bg-indigo-500 font-lexend font-normal text-white text-base w-fit py-1 px-2 rounded-md flex items-center gap-2 hover:bg-indigo-400 transition-all duration-300">
                 {QuizCategory[filters.category as keyof typeof QuizCategory]}
                 <XIcon />
@@ -211,7 +215,7 @@ export const QuizzesPageClientComponent: FC<QuizPageClientComponentProps> = (ser
             )}
             {!!orderBy.timesPlayed && (
               <button
-                onClick={() => handleRemoveURLParam('timesPlayed')}
+                onClick={() => !isOpenSelect && handleRemoveURLParam('timesPlayed')}
                 className="bg-indigo-500 font-lexend font-normal text-white text-base w-fit py-1 px-2 rounded-md flex items-center gap-2 hover:bg-indigo-400 transition-all duration-300">
                 {orderBy.timesPlayed.label}
                 <XIcon />
