@@ -19,7 +19,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      localization={{
+        signIn: {
+          start: {
+            title: 'Faça login',
+            subtitle: 'para continuar no Quiz Expert',
+            actionText: '',
+            actionLink: '',
+          },
+        },
+        socialButtonsBlockButton: 'Entrar com o Google',
+      }}>
       <html
         lang="pt-br"
         className="scrollbar-thumb-gray-500 scrollbar-track-white scrollbar-thin scrollbar-thumb-rounded-full">
