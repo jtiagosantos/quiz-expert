@@ -64,18 +64,10 @@ export const useFaunaServer = async () => {
   };
 
   const findForMostPlayedQuizzes = async () => {
-    const today = new Date();
-
-    const startOfDay = new Date(today);
-    const endOfDay = new Date(today);
-
-    startOfDay.setHours(0, 0, 0, 0);
-    endOfDay.setHours(23, 59, 59, 999);
-
     const {
       data: { data: rawQuizzes },
     } = await fauna.query<{ data: QueryManyResult<RawQuiz> }>(
-      fql`quizzes.all().where(.ts >= Time(${startOfDay.toISOString()}) && .ts <= Time(${endOfDay.toISOString()})).order((desc(.times_played))).take(10)`,
+      fql`quizzes.all().order((desc(.times_played))).take(10)`,
     );
 
     const quizzes = rawQuizzes.map((rawQuiz) => FaunaQuizMapper.toDomain(rawQuiz));
