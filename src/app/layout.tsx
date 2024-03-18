@@ -10,7 +10,16 @@ const lexend = Lexend({ subsets: ['latin'], variable: '--lexend' });
 const russoOne = Russo_One({ subsets: ['latin'], weight: ['400'], variable: '--russoOne' });
 
 export const metadata: Metadata = {
-  title: 'Quiz Expert',
+  title: '🧠 Quiz Expert',
+  description:
+    'Explore uma ampla variedade de quizzes divertidos e desafiadores no Quiz Expert. Teste seus conhecimentos em temas como Português, Conhecimentos Gerais, Tecnologia, Fantasia e muito mais.',
+  openGraph: {
+    title: '🧠 Quiz Expert',
+    description:
+      '🤩 Explore uma ampla variedade de quizzes divertidos e desafiadores no Quiz Expert. Teste seus conhecimentos em temas como Português, Conhecimentos Gerais, Tecnologia, Fantasia e muito mais.',
+    type: 'website',
+    url: 'https://www.quizexpert.com.br/',
+  },
 };
 
 export default function RootLayout({
