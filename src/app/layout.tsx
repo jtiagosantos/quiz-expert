@@ -32,6 +32,13 @@ export default function RootLayout({
       <html
         lang="pt-br"
         className="scrollbar-thumb-gray-500 scrollbar-track-white scrollbar-thin scrollbar-thumb-rounded-full">
+        <head>
+          <script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2349380935535848"
+            crossOrigin="anonymous"
+          />
+        </head>
         <body className={`${lexend.variable} ${russoOne.variable}`}>
           <Header />
           <Toaster />
