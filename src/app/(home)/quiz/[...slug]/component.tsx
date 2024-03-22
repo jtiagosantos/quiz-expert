@@ -4,8 +4,8 @@
 
 import { useState } from 'react';
 import type { FC } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
-import { useAuth } from '@clerk/nextjs';
+import { usePathname } from 'next/navigation';
+import { useAuth } from '@/packages/auth';
 import { QuizAbout } from './quiz-about';
 import { QuizRunner } from './quiz-runner';
 import { Quiz } from '@/interfaces/quiz';
@@ -20,7 +20,6 @@ export const QuizPageClientComponent: FC<QuizPageClientComponentProps> = ({ quiz
   const [showAuthModal, setShowAuthModal] = useState(false);
   const { isSignedIn: isUserSignedIn } = useAuth();
   const pathname = usePathname();
-  const router = useRouter();
 
   const handleStartQuiz = () => {
     if (!isUserSignedIn) {

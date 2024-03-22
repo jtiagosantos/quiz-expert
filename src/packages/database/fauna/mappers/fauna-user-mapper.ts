@@ -1,5 +1,5 @@
-import { User } from '@/interfaces/user';
-import { RawUser } from '@/lib/fauna/config';
+import type { User } from '@/interfaces/user';
+import type { RawUser } from '@/packages/database';
 
 export class FaunaUserMapper {
   public static toDomain(raw: RawUser): User {

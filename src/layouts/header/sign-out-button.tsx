@@ -1,6 +1,6 @@
 'use client';
 
-import { useClerk } from '@clerk/nextjs';
+import { useClerk } from '@/packages/auth';
 import SignOutIcon from '@/assets/icons/sign-out.svg';
 
 export const SignOutButton = () => {

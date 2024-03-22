@@ -2,9 +2,9 @@ import './globals.css';
 
 import { Metadata } from 'next';
 import { Lexend, Russo_One } from 'next/font/google';
-import { ClerkProvider } from '@clerk/nextjs';
+import { ClerkProvider, localization } from '@/packages/auth';
 import { Header } from '@/layouts/header/header';
-import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from '@/packages/ui';
 
 const lexend = Lexend({ subsets: ['latin'], variable: '--lexend' });
 const russoOne = Russo_One({ subsets: ['latin'], weight: ['400'], variable: '--russoOne' });
@@ -28,18 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider
-      localization={{
-        signIn: {
-          start: {
-            title: 'Faça login',
-            subtitle: 'para continuar no Quiz Expert',
-            actionText: '',
-            actionLink: '',
-          },
-        },
-        socialButtonsBlockButton: 'Entrar com o Google',
-      }}>
+    <ClerkProvider localization={localization}>
       <html
         lang="pt-br"
         className="scrollbar-thumb-gray-500 scrollbar-track-white scrollbar-thin scrollbar-thumb-rounded-full">

@@ -7,19 +7,13 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { FC } from 'react';
 import queryString from 'query-string';
-import { QuizCard } from '../../components/quiz-card';
+import { QuizCard } from '@/packages/ui';
 import { Quiz } from '@/interfaces/quiz';
 import { QuizCategory } from '@/enums/quiz-category';
 import { createSlug } from '@/helpers/create-slug';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/packages/ui';
 import { useLoading } from '@/helpers/use-loading';
-import { useFaunaClient } from '@/lib/fauna/helpers/use-fauna-client';
+import { useFaunaClient } from '@/packages/database';
 import { Filters } from '@/interfaces/filters';
 import { OrderBy } from '@/interfaces/order-by';
 import XIcon from '@/assets/icons/x.svg';

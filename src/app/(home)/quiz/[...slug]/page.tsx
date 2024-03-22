@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { QuizPageClientComponent } from './component';
-import { useFaunaServer } from '@/lib/fauna/helpers/use-fauna-server';
+import { useFaunaServer } from '@/packages/database';
 
 type QuizPageProps = {
   params: {

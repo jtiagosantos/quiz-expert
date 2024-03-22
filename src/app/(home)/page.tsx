@@ -1,4 +1,4 @@
-import { useFaunaServer } from '@/lib/fauna/helpers/use-fauna-server';
+import { useFaunaServer } from '@/packages/database';
 import { QuizzesPageClientComponent } from './component';
 import { QuizCategory } from '@/enums/quiz-category';
 

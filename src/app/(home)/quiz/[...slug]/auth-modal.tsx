@@ -1,6 +1,6 @@
-import { SignIn } from '@clerk/nextjs';
+import { SignIn } from '@/packages/auth';
 import type { FC } from 'react';
-import { Modal } from '@/components/modal';
+import { Modal } from '@/packages/ui';
 
 type AuthModalProps = {
   redirectURL: string;
