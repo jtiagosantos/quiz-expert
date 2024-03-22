@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { fauna, fql, QueryManyResult } from '@/lib/fauna/config';
+import { fauna, fql, QueryManyResults } from '@/packages/database';
 
 const bodySchema = z.object({
   type: z.enum(['user.created']),
@@ -30,7 +30,7 @@ export const POST = async (request: NextRequest) => {
         data: {
           data: [userByEmailResult],
         },
-      } = await fauna.query<{ data: QueryManyResult<Record<string, string> | null> }>(
+      } = await fauna.query<{ data: QueryManyResults<Record<string, string> | null> }>(
         fql`users.byEmail(${userEmail})`,
       );
 

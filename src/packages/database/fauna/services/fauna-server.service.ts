@@ -1,19 +1,23 @@
-import { currentUser } from '@clerk/nextjs';
-import { fauna, fql, QueryManyResult, QueryUniqueResult, RawQuiz, RawUser } from '../config';
-import { FaunaUserMapper } from '../mappers/fauna-user.mapper';
-import { FaunaQuizMapper } from '../mappers/fauna-quiz.mapper';
-import { FindQuizzesParams } from '../interfaces/find-quizzes-params';
-import { GetQuizParams } from '../interfaces/get-quiz-params';
+import { currentUser } from '@/packages/auth';
+import { fauna, fql, FaunaUserMapper, FaunaQuizMapper } from '@/packages/database';
+import type {
+  FindQuizzesParams,
+  GetQuizParams,
+  QueryManyResults,
+  QueryUniqueResult,
+  RawQuiz,
+  RawUser,
+} from '@/packages/database';
 
 export const useFaunaServer = async () => {
   const clerkUser = await currentUser();
 
-  const getFaunaUser = async () => {
+  const getUser = async () => {
     const {
       data: {
         data: [rawUser],
       },
-    } = await fauna.query<{ data: QueryManyResult<RawUser> }>(
+    } = await fauna.query<{ data: QueryManyResults<RawUser> }>(
       fql`users.byEmail(${clerkUser?.emailAddresses[0].emailAddress as string})`,
     );
 
@@ -35,13 +39,13 @@ export const useFaunaServer = async () => {
     if (!filters?.category) {
       const {
         data: { data },
-      } = await fauna.query<{ data: QueryManyResult<RawQuiz> }>(fql([`quizzes.all().${order}`]));
+      } = await fauna.query<{ data: QueryManyResults<RawQuiz> }>(fql([`quizzes.all().${order}`]));
 
       rawQuizzes = data;
     } else {
       const {
         data: { data },
-      } = await fauna.query<{ data: QueryManyResult<RawQuiz> }>(
+      } = await fauna.query<{ data: QueryManyResults<RawQuiz> }>(
         fql([`quizzes.all().where(.category == '${filters.category}').${order}`]),
       );
 
@@ -66,7 +70,7 @@ export const useFaunaServer = async () => {
   const findForMostPlayedQuizzes = async () => {
     const {
       data: { data: rawQuizzes },
-    } = await fauna.query<{ data: QueryManyResult<RawQuiz> }>(
+    } = await fauna.query<{ data: QueryManyResults<RawQuiz> }>(
       fql`quizzes.all().order((desc(.times_played))).take(10)`,
     );
 
@@ -76,7 +80,7 @@ export const useFaunaServer = async () => {
   };
 
   return {
-    getFaunaUser,
+    getUser,
     findQuizzes,
     getQuiz,
     findForMostPlayedQuizzes,

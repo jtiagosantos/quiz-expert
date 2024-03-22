@@ -1,5 +1,5 @@
 import BubbleAnimation from '@/assets/animations/bubble-loading.svg';
-import { Modal } from '@/components/modal';
+import { Modal } from '@/packages/ui';
 
 export const CalculationAnswersLoading = () => {
   return (

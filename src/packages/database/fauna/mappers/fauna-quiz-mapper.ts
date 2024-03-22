@@ -1,5 +1,5 @@
-import { Quiz } from '@/interfaces/quiz';
-import { RawQuiz } from '../config';
+import type { Quiz } from '@/interfaces/quiz';
+import type { RawQuiz } from '@/packages/database';
 
 export class FaunaQuizMapper {
   public static toDomain(raw: RawQuiz): Quiz {

@@ -4,17 +4,17 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { QuizDone } from '@/interfaces/quiz-done';
 import { createSlug } from '@/helpers/create-slug';
-import { QuizCard } from '@/components/quiz-card';
 import {
+  QuizCard,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@/packages/ui';
 import BookRemoveIcon from '@/assets/icons/book-remove.svg';
 import { QuizCategory } from '@/enums/quiz-category';
-import { useFaunaClient } from '@/lib/fauna/helpers/use-fauna-client';
+import { useFaunaClient } from '@/packages/database';
 import { useLoading } from '@/helpers/use-loading';
 import { Filters } from '@/interfaces/filters';
 import { OrderBy } from '@/interfaces/order-by';
@@ -45,7 +45,7 @@ export default function MyQuizzesPage() {
   const [user, setUser] = useState<User | undefined>(undefined);
   const [isOpenSelect, setIsOpenSelect] = useState(false);
   const { isLoading, enableLoading, disableLoading } = useLoading(true);
-  const { isLoadedClerkUser, getFaunaUser, findQuizzesDone } = useFaunaClient();
+  const { isLoaded, getUser, findQuizzesDone } = useFaunaClient();
 
   const handleFetchQuizzesDoneByParams = async () => {
     enableLoading();
@@ -66,12 +66,12 @@ export default function MyQuizzesPage() {
   };
 
   useEffect(() => {
-    if (isLoadedClerkUser) {
-      getFaunaUser().then((data) => {
+    if (isLoaded) {
+      getUser().then((data) => {
         setUser(data);
       });
     }
-  }, [isLoadedClerkUser]);
+  }, [isLoaded]);
 
   useEffect(() => {
     if (user) {

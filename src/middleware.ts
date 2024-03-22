@@ -1,4 +1,4 @@
-import { authMiddleware } from '@clerk/nextjs';
+import { authMiddleware } from '@/packages/auth';
 
 export default authMiddleware({
   publicRoutes: ['/', '/quiz(.*)'],

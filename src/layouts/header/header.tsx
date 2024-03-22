@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { currentUser } from '@clerk/nextjs';
+import { currentUser } from '@/packages/auth';
 import {
   Menubar,
   MenubarContent,
@@ -8,7 +8,7 @@ import {
   MenubarMenu,
   MenubarTrigger,
   MenubarSeparator,
-} from '@/components/ui/menubar';
+} from '@/packages/ui';
 import { SignOutButton } from './sign-out-button';
 import BooksIcon from '@/assets/icons/books.svg';
 

@@ -1,30 +1,32 @@
-import { useUser } from '@clerk/nextjs';
+import { useUser } from '@/packages/auth';
 import {
   fauna,
   fql,
-  QueryManyResult,
-  QueryUniqueResult,
-  RawQuiz,
-  RawQuizDone,
+  FaunaUserMapper,
+  FaunaQuizMapper,
+  FaunaQuizDoneMapper,
+  SaveQuizAsDoneParams,
+} from '@/packages/database';
+import type {
+  QueryManyResults,
   RawUser,
-} from '../config';
-import { FaunaUserMapper } from '../mappers/fauna-user.mapper';
-import { FaunaQuizDoneMapper } from '../mappers/fauna-quiz-done.mapper';
-import { FaunaQuizMapper } from '../mappers/fauna-quiz.mapper';
-import { SaveQuizAsDoneParams } from '../interfaces/save-quiz-as-done-params';
-import { SaveQuizAsPlayedParams } from '../interfaces/save-quiz-as-played-params';
-import { FindQuizzesDoneParams } from '../interfaces/find-quizzes-done-params';
-import { FindQuizzesParams } from '../interfaces/find-quizzes-params';
+  RawQuiz,
+  FindQuizzesParams,
+  QueryUniqueResult,
+  SaveQuizAsPlayedParams,
+  FindQuizzesDoneParams,
+  RawQuizDone,
+} from '@/packages/database';
 
 export const useFaunaClient = () => {
   const { user: clerkUser, isLoaded } = useUser();
 
-  const getFaunaUser = async () => {
+  const getUser = async () => {
     const {
       data: {
         data: [rawUser],
       },
-    } = await fauna.query<{ data: QueryManyResult<RawUser> }>(
+    } = await fauna.query<{ data: QueryManyResults<RawUser> }>(
       fql`users.byEmail(${clerkUser?.primaryEmailAddress?.emailAddress as string})`,
     );
 
@@ -46,13 +48,13 @@ export const useFaunaClient = () => {
     if (!filters?.category) {
       const {
         data: { data },
-      } = await fauna.query<{ data: QueryManyResult<RawQuiz> }>(fql([`quizzes.all().${order}`]));
+      } = await fauna.query<{ data: QueryManyResults<RawQuiz> }>(fql([`quizzes.all().${order}`]));
 
       rawQuizzes = data;
     } else {
       const {
         data: { data },
-      } = await fauna.query<{ data: QueryManyResult<RawQuiz> }>(
+      } = await fauna.query<{ data: QueryManyResults<RawQuiz> }>(
         fql([`quizzes.all().where(.category == '${filters.category}').${order}`]),
       );
 
@@ -69,7 +71,7 @@ export const useFaunaClient = () => {
       data: {
         data: [quizDone],
       },
-    } = await fauna.query<{ data: QueryManyResult<Record<string, string> | null> }>(
+    } = await fauna.query<{ data: QueryManyResults<Record<string, string> | null> }>(
       fql`quizzes_done.byUserId(${userId}).where(.quiz_id == ${quizId})`,
     );
 
@@ -78,15 +80,15 @@ export const useFaunaClient = () => {
         fql`quizzes.byId(${quizId})`,
       );
 
-      await fauna.query(
-        fql`quizzes_done.create({
-          title: ${quiz.title},
-          thumbnail_url: ${quiz.thumbnail_url},
-          category: ${quiz.category},
-          quiz_id: ${quizId},
-          user_id: ${userId}
-        })`,
-      );
+      const quizDone = FaunaQuizDoneMapper.toDatabase({
+        title: quiz.title,
+        thumbnailURL: quiz.thumbnail_url,
+        category: quiz.category,
+        quizId,
+        userId,
+      });
+
+      await fauna.query(fql`quizzes_done.create(${quizDone})`);
     }
   };
 
@@ -111,7 +113,7 @@ export const useFaunaClient = () => {
     if (!filters?.category) {
       const {
         data: { data },
-      } = await fauna.query<{ data: QueryManyResult<RawQuizDone> }>(
+      } = await fauna.query<{ data: QueryManyResults<RawQuizDone> }>(
         fql([`quizzes_done.byUserId('${userId}').${order}`]),
       );
 
@@ -119,7 +121,7 @@ export const useFaunaClient = () => {
     } else {
       const {
         data: { data },
-      } = await fauna.query<{ data: QueryManyResult<RawQuizDone> }>(
+      } = await fauna.query<{ data: QueryManyResults<RawQuizDone> }>(
         fql([
           `quizzes_done.byUserId('${userId}').where(.category == '${filters.category}').${order}`,
         ]),
@@ -136,8 +138,8 @@ export const useFaunaClient = () => {
   };
 
   return {
-    isLoadedClerkUser: isLoaded,
-    getFaunaUser,
+    isLoaded,
+    getUser,
     findQuizzes,
     saveQuizAsDone,
     saveQuizAsPlayed,
