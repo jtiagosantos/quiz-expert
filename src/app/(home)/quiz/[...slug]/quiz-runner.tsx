@@ -5,14 +5,13 @@ import type { FC } from 'react';
 import { Progress, useToast } from '@/packages/ui';
 import { Quiz } from '@/interfaces/quiz';
 import { useFaunaClient } from '@/packages/database';
+import { ONE_SECOND, FULL_PROGRESS_BAR } from '@/packages/constants';
 import { CalculationAnswersLoading } from './calculation-answers-loading';
 
 type QuizRunnerProps = {
   quiz: Quiz;
   onPlayAgain: () => void;
 };
-
-const ONE_SECOND_MS = 1000;
 
 export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onPlayAgain }) => {
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -24,9 +23,9 @@ export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onPlayAgain }) => {
   const { toast, dismiss } = useToast();
   const { getUser, saveQuizAsDone, saveQuizAsPlayed } = useFaunaClient();
 
-  const progress = questionIndex * 10;
   const question = quiz.questions[questionIndex];
   const totalQuestions = quiz.questions.length;
+  const progress = questionIndex * (FULL_PROGRESS_BAR / totalQuestions);
   const isLastQuestion = questionIndex + 1 === totalQuestions;
 
   const handleQuiz = async () => {
@@ -75,7 +74,7 @@ export const QuizRunner: FC<QuizRunnerProps> = ({ quiz, onPlayAgain }) => {
         setAreButtonsDisabled(false);
 
         resolve(timeoutId);
-      }, ONE_SECOND_MS);
+      }, ONE_SECOND);
     }).then((timeoutId) => {
       clearTimeout(timeoutId as NodeJS.Timeout);
     });
