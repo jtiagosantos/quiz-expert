@@ -7,6 +7,7 @@ export * from './fauna/interfaces/raw/raw-quiz';
 export * from './fauna/interfaces/raw/raw-question';
 export * from './fauna/interfaces/raw/raw-answer';
 export * from './fauna/interfaces/raw/raw-quiz-done';
+export * from './fauna/interfaces/raw/raw-quiz-done-query';
 
 export * from './fauna/interfaces/params/find-quizzes-done-params';
 export * from './fauna/interfaces/params/find-quizzes-params';

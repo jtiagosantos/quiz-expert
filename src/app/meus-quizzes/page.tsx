@@ -176,7 +176,7 @@ export default function MyQuizzesPage() {
               <div className="grid grid-cols-4 gap-6 mt-6 max-[1070px]:grid-cols-3 max-[790px]:grid-cols-2 max-[520px]:gap-3">
                 {quizzesDone?.map((quizDone) => {
                   const urlForQuizPage = '/quiz/'.concat(
-                    createSlug(quizDone.title).concat('--').concat(quizDone.quizId),
+                    createSlug(quizDone.title).concat('--').concat(quizDone.id),
                   );
 
                   return (

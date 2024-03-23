@@ -1,8 +1,8 @@
 import { QuizCategory } from '@/enums/quiz-category';
 
-export interface QuizDone {
+export interface RawQuizDoneQuery {
   id: string;
   title: string;
-  thumbnailURL: string;
+  thumbnail_url: string;
   category: keyof typeof QuizCategory;
 }
