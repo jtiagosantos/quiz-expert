@@ -15,7 +15,7 @@ import type {
   QueryUniqueResult,
   SaveQuizAsPlayedParams,
   FindQuizzesDoneParams,
-  RawQuizDone,
+  RawQuizDoneQuery,
 } from '@/packages/database';
 
 export const useFaunaClient = () => {
@@ -88,7 +88,7 @@ export const useFaunaClient = () => {
         userId,
       });
 
-      await fauna.query(fql`quizzes_done.create(${quizDone})`);
+      await fauna.query(fql`quizzes_done.create(${{ ...quizDone }})`);
     }
   };
 
@@ -101,7 +101,7 @@ export const useFaunaClient = () => {
   };
 
   const findQuizzesDone = async ({ userId, filters, orderBy }: FindQuizzesDoneParams) => {
-    let rawQuizzesDone: Array<RawQuizDone> = [];
+    let rawQuizzesDone: Array<RawQuizDoneQuery> = [];
     let order = 'order(desc(.ts))';
 
     if (orderBy?.timestamp === 'asc') {
@@ -113,18 +113,46 @@ export const useFaunaClient = () => {
     if (!filters?.category) {
       const {
         data: { data },
-      } = await fauna.query<{ data: QueryManyResults<RawQuizDone> }>(
-        fql([`quizzes_done.byUserId('${userId}').${order}`]),
+      } = await fauna.query<{ data: QueryManyResults<RawQuizDoneQuery> }>(
+        fql([
+          `
+            quizzes_done
+              .byUserId('${userId}')
+              .${order}
+              .map((data) => quizzes.byId(data.quiz_id) {
+                id,
+                title,
+                thumbnail_url,
+                category,
+              }
+            )
+          `,
+        ]),
       );
 
       rawQuizzesDone = data;
     } else {
       const {
-        data: { data },
-      } = await fauna.query<{ data: QueryManyResults<RawQuizDone> }>(
+        data: { data: quizzesDone },
+      } = await fauna.query<{ data: QueryManyResults<RawQuizDoneQuery> }>(
         fql([
-          `quizzes_done.byUserId('${userId}').where(.category == '${filters.category}').${order}`,
+          `
+            quizzes_done
+              .byUserId('${userId}')
+              .${order}
+              .map((data) => quizzes.byId(data.quiz_id) {
+                id,
+                title,
+                thumbnail_url,
+                category,
+              }
+            )
+          `,
         ]),
+      );
+
+      const { data } = await fauna.query<QueryManyResults<RawQuizDoneQuery>>(
+        fql`${quizzesDone}.filter((quiz) => quiz.category == ${filters.category})`,
       );
 
       rawQuizzesDone = data;
