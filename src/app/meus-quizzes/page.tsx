@@ -82,7 +82,7 @@ export default function MyQuizzesPage() {
   return (
     <main className="pt-[100px] pb-10 max-w-[1110px] mx-auto max-[1300px]:px-4 max-[1070px]:max-w-[840px] max-[790px]:max-w-[540px]">
       <h2 className="font-lexend text-gray-700 text-2xl font-semibold max-[790px]:text-xl">
-        🎯 Quizzes que você já fez
+        🎯 Quizzes que você já jogou
       </h2>
 
       <section>
