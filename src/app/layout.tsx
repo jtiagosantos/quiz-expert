@@ -20,6 +20,11 @@ export const metadata: Metadata = {
     type: 'website',
     url: 'https://www.quizexpert.com.br/',
   },
+  verification: {
+    other: {
+      'google-adsense-account': 'ca-pub-2349380935535848',
+    },
+  },
 };
 
 export default function RootLayout({
